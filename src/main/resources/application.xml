@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!--"${db.pool.size}" - Добовляются выражения expresion languege or SPEL (Spring expresion lenguige) #{}-->
+    <context:property-placeholder location="classpath:application.properties"/>
+
+<!--    &lt;!&ndash;Бин который упровляет проперти&ndash;&gt;-->
+<!--    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">-->
+<!--        <property name="location" value="application.properties"/>-->
+<!--    </bean>-->
 
     <!--Создание бина-->
-    <bean id="connectionPool_1" class="com.dmdev.spring.database.ConnectionPool">
+    <bean id="connectionPool_1" class="com.dmdev.spring.database.ConnectionPool"
+          init-method="init"
+          destroy-method="rollBack"
+    >
         <constructor-arg name="username" value="postgres"/>
-        <constructor-arg name="poolsize" index="1" value="10"/>
+        <constructor-arg name="poolsize" index="1" value="${db.pool.size}"/>
         <constructor-arg name="aras">
             <list>
                 <value>--arg1=valuel</value>
@@ -14,17 +29,25 @@
             </list>
         </constructor-arg>
         <constructor-arg name="properties">
+<!--            <map>-->
+<!--                <entry key="url" value="postaresurt"/>-->
+<!--                <entry key="password" value="123"/>-->
+<!--            </map>-->
+            <null/>
+        </constructor-arg>
+
+        <property name="properties">
             <map>
                 <entry key="url" value="postaresurt"/>
                 <entry key="password" value="123"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
-    <!--Передача бина в конструктор-->
-    <bean id="companyRepository" class="com.dmdev.spring.database.repository.CompanyRepository">
-        <constructor-arg ref="connectionPool_1"/>
-    </bean>
+<!--    &lt;!&ndash;Передача бина в конструктор&ndash;&gt;-->
+<!--    <bean id="companyRepository" class="com.dmdev.spring.database.repository.CompanyRepository">-->
+<!--        <constructor-arg ref="connectionPool_1"/>-->
+<!--    </bean>-->
 
     <!--Передача бина в конструктор c помощью фабричного метода.-->
     <bean id="companyRepository" class="com.dmdev.spring.database.repository.CompanyRepository" factory-method="of">

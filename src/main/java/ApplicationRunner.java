@@ -3,10 +3,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ApplicationRunner {
     public static void main(String[] args) {
-        var context = new ClassPathXmlApplicationContext("application.xml");
+        try (var context = new ClassPathXmlApplicationContext("application.xml")) {
+            //var bean = context.getBean(ConnectionPool.class);
+            var bean = context.getBean("connectionPool_1",ConnectionPool.class);
+            bean.example();
+        }
 
-        //var bean = context.getBean(ConnectionPool.class);
-        var bean = context.getBean("connectionPool_1",ConnectionPool.class);
-        bean.example();
+
     }
 }

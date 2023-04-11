@@ -8,7 +8,12 @@ public class ConnectionPool {
     private final String username;
     private final Integer poolsize;
     private final List<Object> aras;
-    private final Map<String, Object> properties;
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+
+    private Map<String, Object> properties;
 
     public ConnectionPool(String username, Integer poolsize, List<Object> aras, Map<String, Object> properties) {
         this.username = username;
@@ -19,5 +24,13 @@ public class ConnectionPool {
 
     public void example(){
         System.out.println("Hello ConnectionPool!!!");
+    }
+
+    private void init() {
+        System.out.println("Init pool");
+    }
+
+    private void rollBack() {
+        System.out.println("Roll back!");
     }
 }
